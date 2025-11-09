@@ -26,4 +26,11 @@ public class Medico {
     @Embedded
     private Endereco endereco;
 
+    public Medico(DadosCadastroMedico medicoDTO) {
+        this.nome =medicoDTO.nome();
+        this.crm = medicoDTO.crm();
+        this.email = medicoDTO.email();
+        this.especialidade = medicoDTO.especialidade();
+        this.endereco = new Endereco(medicoDTO.endereco());
+    }
 }

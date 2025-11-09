@@ -6,7 +6,7 @@ public record DadosCadastroMedico(
         String nome,
         String email,
         String crm,
-        String especialidade,
+        Especialidade especialidade,
         DadosEndereco endereco
 
 
