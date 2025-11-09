@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -52,6 +53,8 @@ public class MedicoController {
 
     @DeleteMapping("/{id}")
     @Transactional
+
+    //@Secured("ROLE_ADMIN") //caso queira perminir apenas sob esta Role. Precisa habilitar em SecutityConfiguration SecurityFilterChain
     public ResponseEntity<Void> deleteMedico(@PathVariable long id){
         medicoRepository.deleteById(id);
 
