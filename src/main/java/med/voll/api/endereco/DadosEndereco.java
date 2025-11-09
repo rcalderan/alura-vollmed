@@ -19,4 +19,7 @@ public record DadosEndereco(
         String numero,
         String complemento
 ) {
+    public DadosEndereco(Endereco e){
+        this(e.getLogradouro(),e.getBairro(), e.getCep(),e.getCidade(), e.getUf(), e.getNumero(),e.getComplemento());
+    }
 }
