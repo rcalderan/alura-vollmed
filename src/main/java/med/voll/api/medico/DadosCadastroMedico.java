@@ -13,6 +13,9 @@ public record DadosCadastroMedico(
         String nome,
 
         @NotBlank
+        String telefone,
+
+        @NotBlank
         @Email
         String email,
         @NotBlank
