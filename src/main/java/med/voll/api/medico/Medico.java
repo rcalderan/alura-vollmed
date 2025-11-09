@@ -1,11 +1,15 @@
 package med.voll.api.medico;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.endereco.Endereco;
+
+import java.util.Optional;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,5 +38,15 @@ public class Medico {
         this.telefone = medicoDTO.telefone();
         this.especialidade = medicoDTO.especialidade();
         this.endereco = new Endereco(medicoDTO.endereco());
+    }
+
+
+    public void update(@Valid DadosUpdateMedico dto) {
+        Optional.ofNullable(dto.nome()).ifPresent(n -> this.nome = n);
+        Optional.ofNullable(dto.telefone()).ifPresent(n -> this.telefone = n);
+        Optional.ofNullable(dto.email()).ifPresent(e -> this.email = e);
+        Optional.ofNullable(dto.crm()).ifPresent(c -> this.crm = c);
+        Optional.ofNullable(dto.especialidade()).ifPresent(es -> this.especialidade = es);
+        Optional.ofNullable(dto.endereco()).ifPresent(end -> this.endereco.update(end));
     }
 }
