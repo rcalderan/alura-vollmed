@@ -1,6 +1,7 @@
 package med.voll.api.infra.exeption.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,12 +22,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 //@EnableMethodSecurity(securedEnabled = true) habilitar caso queira controlar o metodo. exc Delete sob role especifica
 public class SecurityConfigurations{
 
+    @Value("${api.security.dev.allow_all:true}")
+    private Boolean byPass;
+
     @Autowired
     private SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        return !byPass ? http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -37,6 +41,18 @@ public class SecurityConfigurations{
                         .anyRequest().authenticated()
 
                 ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build()
+        : http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                //.authorizeHttpRequests(auth -> auth
+                        //.requestMatchers("/login").permitAll()
+                        // se quiser restringir sob um Role especifico:
+                        //.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
+                        //.anyRequest().authenticated()
+
+                //).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

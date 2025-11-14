@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import med.voll.api.domain.user.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,8 @@ import java.io.IOException;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
+    @Value("${api.security.dev.allow_all:true}")
+    private Boolean byPass;
 
     @Autowired
     private TokenService tokenService;
@@ -25,17 +28,19 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var jwtToken = readJwtToken(request);
-        if(jwtToken!=null){
-            var subject = tokenService.getSubject(jwtToken);
-            var user = repository.findByLogin(subject);
+        if(!byPass){
+            var jwtToken = readJwtToken(request);
+            if(jwtToken!=null){
+                var subject = tokenService.getSubject(jwtToken);
+                var user = repository.findByLogin(subject);
 
-            var authentication = new UsernamePasswordAuthenticationToken(
-                    user.getUsername(), null, user.getAuthorities());
+                var authentication = new UsernamePasswordAuthenticationToken(
+                        user.getUsername(), null, user.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+
         }
-
 
 
         filterChain.doFilter(request, response);

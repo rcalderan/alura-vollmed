@@ -3,6 +3,7 @@ CREATE TABLE Pacientes (
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     convenio VARCHAR(50) NOT NULL,
+    telefone VARCHAR(15) NOT NULL,
 
     logradouro VARCHAR(100),
     bairro VARCHAR(100),
