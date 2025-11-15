@@ -1,5 +1,6 @@
 package med.voll.api.domain.consulta;
 
+import med.voll.api.domain.consulta.validations.IConsultSchedule;
 import med.voll.api.domain.medico.Especialidade;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
@@ -8,6 +9,8 @@ import med.voll.api.infra.exeption.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ConsultaService {
@@ -21,9 +24,13 @@ public class ConsultaService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
+    @Autowired
+    private List<IConsultSchedule> validators;
+
     public ResponseEntity<?> agendar(DadosAgendamentoConsulta dto) {
 
         try{
+            validators.forEach(v->v.validate(dto));
             var medico = escolherMedico(dto);
 
             var paciente = pacienteRepository.findById(dto.idPaciente())
@@ -33,7 +40,7 @@ public class ConsultaService {
             medico.addConsulta(consulta);
             paciente.addConsulta(consulta);
 
-            return ResponseEntity.ok(repository.save(consulta));
+            return ResponseEntity.ok(new DadosDetalhamentoConsulta( repository.save(consulta)));
 
         }catch (ValidationException errorValidation){
             return ResponseEntity.badRequest().body(errorValidation.getMessage());
