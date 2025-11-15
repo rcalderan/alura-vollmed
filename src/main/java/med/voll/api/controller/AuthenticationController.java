@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import med.voll.api.domain.user.AuthenticationService;
 import med.voll.api.domain.user.DadosAuthentication;
