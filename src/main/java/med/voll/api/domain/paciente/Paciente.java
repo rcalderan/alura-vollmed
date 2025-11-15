@@ -29,5 +29,15 @@ public class Paciente extends Pessoa {
         super( p.nome(),p.email(),p.telefone(), p.endereco());
         this.convenio = p.convenio();
     }
+
+    public void addConsulta(Consulta consulta) {
+        var exist = this.consultas.stream()
+                .filter(c -> c.getPaciente() == consulta.getPaciente())
+                .limit(1)
+                .toList();
+        if(exist.isEmpty()){
+            this.consultas.add(consulta);
+        }
+    }
 }
 

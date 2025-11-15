@@ -34,7 +34,6 @@ public class Medico {
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consulta> consultas = new ArrayList<>();
 
-
     @Embedded
     private Endereco endereco;
 
@@ -47,6 +46,15 @@ public class Medico {
         this.endereco = new Endereco(medicoDTO.endereco());
     }
 
+    public void addConsulta(Consulta consulta) {
+        var exist = this.consultas.stream()
+                .filter(c -> c.getMedico() == consulta.getMedico())
+                .limit(1)
+                .toList();
+        if(exist.isEmpty()){
+            this.consultas.add(consulta);
+        }
+    }
 
     public void update(@Valid DadosUpdateMedico dto) {
         Optional.ofNullable(dto.nome()).ifPresent(n -> this.nome = n);
