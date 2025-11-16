@@ -1,7 +1,6 @@
 package med.voll.api.domain.consulta;
 
 import med.voll.api.domain.consulta.validations.IConsultSchedule;
-import med.voll.api.domain.medico.Especialidade;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
@@ -11,12 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class ConsultaService {
 
     @Autowired
-    private CosultaRepository repository;
+    private ConsultaRepository repository;
 
     @Autowired
     private MedicoRepository medicoRepository;
@@ -27,24 +27,18 @@ public class ConsultaService {
     @Autowired
     private List<IConsultSchedule> validators;
 
-    public ResponseEntity<?> agendar(DadosAgendamentoConsulta dto) {
+    public ResponseEntity<DadosDetalhamentoConsulta> agendar(DadosAgendamentoConsulta dto) {
+        validators.forEach(v->v.validate(dto));
+        var medico = escolherMedico(dto);
 
-        try{
-            validators.forEach(v->v.validate(dto));
-            var medico = escolherMedico(dto);
+        var paciente = pacienteRepository.findById(dto.idPaciente())
+                .orElseThrow(() -> new ValidationException("Paciente não encontrado"));
 
-            var paciente = pacienteRepository.findById(dto.idPaciente())
-                    .orElseThrow(() -> new ValidationException("Paciente não encontrado"));
+        Consulta consulta = new Consulta(null, medico, paciente, dto.date());
+        medico.addConsulta(consulta);
+        paciente.addConsulta(consulta);
 
-            Consulta consulta = new Consulta(null, medico, paciente, dto.date());
-            medico.addConsulta(consulta);
-            paciente.addConsulta(consulta);
-
-            return ResponseEntity.ok(new DadosDetalhamentoConsulta( repository.save(consulta)));
-
-        }catch (ValidationException errorValidation){
-            return ResponseEntity.badRequest().body(errorValidation.getMessage());
-        }
+        return ResponseEntity.ok(new DadosDetalhamentoConsulta( repository.save(consulta)));
     }
 
 
@@ -60,7 +54,9 @@ public class ConsultaService {
                 if(dto.especialidade()==null){
                     throw new ValidationException("Especialidade deve ser informada");
                 }
-                return medicoRepository.getRandomMedic(dto.especialidade(), dto.date());
+                List<Medico> medicos=  medicoRepository.getRandomMedic(dto.especialidade(), dto.date());
+                return medicos.isEmpty() ? null : medicos.get(new Random().nextInt(medicos.size()));
+
             }
             return medico.get();
 

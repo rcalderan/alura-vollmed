@@ -25,6 +25,5 @@ public record DadosCadastroPaciente(
         @NotNull
         Convenio convenio,
 
-        @NotNull
         Consulta consulta) {
 }

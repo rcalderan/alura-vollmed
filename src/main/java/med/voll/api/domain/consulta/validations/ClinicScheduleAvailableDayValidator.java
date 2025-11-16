@@ -6,9 +6,11 @@ import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 
+import static med.voll.api.domain.consulta.ConsultaEnums.OUT_OF_HOURS_MSG;
+
 
 @Component
-public class ClinicScheduleValidator implements IConsultSchedule{
+public class ClinicScheduleAvailableDayValidator implements IConsultSchedule{
 
     public void validate(DadosAgendamentoConsulta dto){
         var consultDate = dto.date();
@@ -19,7 +21,7 @@ public class ClinicScheduleValidator implements IConsultSchedule{
          var sunday = consultDate.getDayOfWeek().equals(DayOfWeek.SUNDAY);
 
          if(early || later || sunday){
-             throw new ValidationException("Consulta fora do horário de funcionamento");
+             throw new ValidationException(OUT_OF_HOURS_MSG.getMessage());
          }
     }
 }

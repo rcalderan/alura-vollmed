@@ -47,6 +47,9 @@ public class Medico {
     }
 
     public void addConsulta(Consulta consulta) {
+        if(consulta == null){
+            return;
+        }
         var exist = this.consultas.stream()
                 .filter(c -> c.getMedico() == consulta.getMedico())
                 .limit(1)
