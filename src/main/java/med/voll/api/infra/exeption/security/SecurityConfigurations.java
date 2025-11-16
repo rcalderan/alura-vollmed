@@ -36,7 +36,6 @@ public class SecurityConfigurations{
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
-                        //.requestMatchers("/v3/api-docs/**","/swagger-ui/index.html","swagger-ui/**").permitAll() //enable swagger
                         // se quiser restringir sob um Role especifico:
                         //.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -49,6 +48,9 @@ public class SecurityConfigurations{
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //.authorizeHttpRequests(auth -> auth
                         //.requestMatchers("/login").permitAll()
+
+                        //.requestMatchers("/v3/api-docs/**","/swagger-ui/index.html
+                        // ","swagger-ui/**").permitAll() //enable swagger
                         // se quiser restringir sob um Role especifico:
                         //.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
                         //.anyRequest().authenticated()
