@@ -20,8 +20,9 @@ import java.util.Optional;
 @Entity(name = "medicos")
 @Table(name="Medicos")
 public class Medico {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nome;
     private String email;
@@ -37,7 +38,8 @@ public class Medico {
     @Embedded
     private Endereco endereco;
 
-    public Medico(DadosCadastroMedico medicoDTO) {
+    public Medico(long id, DadosCadastroMedico medicoDTO) {
+        this.id = id;
         this.nome =medicoDTO.nome();
         this.crm = medicoDTO.crm();
         this.email = medicoDTO.email();

@@ -5,6 +5,7 @@ import med.voll.api.domain.endereco.DadosEndereco;
 import med.voll.api.domain.paciente.Convenio;
 import med.voll.api.domain.paciente.DadosCadastroPaciente;
 import med.voll.api.domain.paciente.Paciente;
+import med.voll.api.domain.user.Usuario;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,9 @@ class MedicoRepositoryTest {
     }
 
     private Medico cadastrarMedico(DadosCadastroMedico dto){
-        var m = new Medico(dto);
+        var user = new Usuario(dto.nome(),dto.email(),dto.crm());
+        em.persist(user);
+        var m = new Medico(user.getId(), dto);
         em.persist(m);
         return m;
     }

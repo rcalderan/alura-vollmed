@@ -19,19 +19,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class MedicoController {
 
     @Autowired
-    private MedicoRepository medicoRepository;
+    private MedicoService medicoService;
 
     @PostMapping
-    @Transactional
     public ResponseEntity<Long> cadastrar(@RequestBody @Valid DadosCadastroMedico dto, UriComponentsBuilder uriBuilder){
-        var medico = medicoRepository.save(new Medico(dto));
+        var medico = medicoService.create(dto);
         var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
         return ResponseEntity.created(uri).body(medico.getId());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalharMedico> getMedico(@PathVariable long id){
-        return medicoRepository.findById(id)
+        return medicoService.getById(id)
                 .map(DadosDetalharMedico::new)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -39,18 +38,16 @@ public class MedicoController {
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemMedico>> listAll(@PageableDefault(size=10,sort = {"nome"}) Pageable paginacao){
-        var page = medicoRepository.findAll(paginacao)
-                .map(DadosListagemMedico::new);
+        var page = medicoService.getAll(paginacao);
         return ResponseEntity.ok(page);
     }
 
     @PutMapping
-    @Transactional
     public ResponseEntity<Void> update(@RequestBody @Valid DadosUpdateMedico dto){
 
-        var medico = medicoRepository.getReferenceById(dto.id());
-        medico.update(dto);
-        return ResponseEntity.ok().build();
+        medicoService.update(dto);
+
+        return ResponseEntity.accepted().build(); //ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
@@ -58,7 +55,7 @@ public class MedicoController {
 
     //@Secured("ROLE_ADMIN") //caso queira perminir apenas sob esta Role. Precisa habilitar em SecutityConfiguration SecurityFilterChain
     public ResponseEntity<Void> deleteMedico(@PathVariable long id){
-        medicoRepository.deleteById(id);
+        medicoService.delete(id);
 
         return ResponseEntity.noContent().build();
     }
