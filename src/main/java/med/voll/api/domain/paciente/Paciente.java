@@ -5,11 +5,15 @@ import jakarta.validation.Valid;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import med.voll.api.domain.Pessoa;
 import med.voll.api.domain.consulta.Consulta;
+import med.voll.api.domain.endereco.Endereco;
+import med.voll.api.domain.medico.DadosUpdateMedico;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @NoArgsConstructor
@@ -18,6 +22,7 @@ import java.util.List;
 @Table(name = "Pacientes")
 public class Paciente extends Pessoa {
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private Convenio convenio;
 
@@ -25,8 +30,8 @@ public class Paciente extends Pessoa {
     private List<Consulta> consultas = new ArrayList<>();
 
 
-    public Paciente(@Valid DadosCadastroPaciente p) {
-        super( p.nome(),p.email(),p.telefone(), p.endereco());
+    public Paciente(Long id, @Valid DadosCadastroPaciente p) {
+        super(id, p.nome(),p.email(),p.telefone(), p.endereco());
         this.convenio = p.convenio();
     }
 
@@ -38,6 +43,14 @@ public class Paciente extends Pessoa {
         if(exist.isEmpty()){
             this.consultas.add(consulta);
         }
+    }
+
+    public void update(@Valid DadosUpdatePaciente dto) {
+        Optional.ofNullable(dto.nome()).ifPresent(this::setNome);
+        Optional.ofNullable(dto.telefone()).ifPresent(this::setTelefone);
+        Optional.ofNullable(dto.email()).ifPresent(this::setEmail);
+        Optional.ofNullable(dto.convenio()).ifPresent(this::setConvenio);
+        Optional.ofNullable(dto.endereco()).ifPresent(end -> this.setEndereco(new Endereco(end)));
     }
 }
 

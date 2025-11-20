@@ -93,7 +93,9 @@ class MedicoRepositoryTest {
     }
 
     private Paciente cadastrarPaciente(DadosCadastroPaciente dto){
-        var p = new Paciente(dto);
+        var u= new Usuario(dto.nome(),dto.email(),dto.telefone());
+        em.persist(u);
+        var p = new Paciente(u.getId(), dto);
         em.persist(p);
         return p;
     }

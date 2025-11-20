@@ -15,7 +15,7 @@ import med.voll.api.domain.endereco.Endereco;
 public abstract class Pessoa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
@@ -25,7 +25,8 @@ public abstract class Pessoa {
     @Embedded
     private Endereco endereco;
 
-    public Pessoa(String nome, String email, String telefone, DadosEndereco endereco){
+    public Pessoa(Long id, String nome, String email, String telefone, DadosEndereco endereco){
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;

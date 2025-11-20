@@ -1,15 +1,15 @@
 package med.voll.api.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import med.voll.api.domain.medico.DadosUpdateMedico;
 import med.voll.api.domain.paciente.*;
+import med.voll.api.domain.user.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,19 +19,24 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class PacienteController {
 
     @Autowired
-    private PacienteRepository repository;
+    private PacienteService pacienteService;
 
     @PostMapping
-    @Transactional
     public ResponseEntity<Long> cadastrar(@RequestBody @Valid DadosCadastroPaciente dto, UriComponentsBuilder uriBuilder){
-        var paciente = repository.save(new Paciente(dto));
-        var uri = uriBuilder.path("/pacientes/{id}").buildAndExpand(paciente.getId()).toUri();
-        return ResponseEntity.created(uri).body(paciente.getId());
+        var pacienteId = pacienteService.salvarPaciente(dto);
+        var uri = uriBuilder.path("/pacientes/{id}").buildAndExpand(pacienteId).toUri();
+        return ResponseEntity.created(uri).body(pacienteId);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> update(@RequestBody @Valid DadosUpdatePaciente dto){
+        pacienteService.update(dto);
+        return ResponseEntity.accepted().build(); //ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalhePaciente> getPaciente(@PathVariable long id){
-        return repository.findById(id)
+        return pacienteService.getById(id)
                 .map(DadosDetalhePaciente::new)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -39,8 +44,14 @@ public class PacienteController {
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemPaciente>> listAll(@PageableDefault(size=10,sort = {"nome"}) Pageable paginacao){
-        var page = repository.findAll(paginacao)
-                .map(DadosListagemPaciente::new);
+        var page = pacienteService.getAll(paginacao);
         return ResponseEntity.ok(page);
+    }
+
+    //@Secured("ROLE_ADMIN") //caso queira perminir apenas sob esta Role. Precisa habilitar em SecutityConfiguration SecurityFilterChain
+    public ResponseEntity<Void> deletePaciente(@PathVariable long id){
+        pacienteService.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
