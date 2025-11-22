@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import med.voll.api.domain.Perfil;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.endereco.Endereco;
 
@@ -28,6 +29,10 @@ public class Medico {
     private String email;
     private String telefone;
     private String crm;
+
+
+    @Enumerated(EnumType.STRING)
+    private Perfil perfil;
 
     @Enumerated(EnumType.STRING)
     private Especialidade especialidade;

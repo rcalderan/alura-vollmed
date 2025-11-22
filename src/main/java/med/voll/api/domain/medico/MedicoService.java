@@ -1,5 +1,6 @@
 package med.voll.api.domain.medico;
 
+import med.voll.api.domain.Perfil;
 import med.voll.api.domain.user.Usuario;
 import med.voll.api.domain.user.UsuarioRepository;
 import med.voll.api.domain.user.UsuarioService;
@@ -26,7 +27,7 @@ public class MedicoService {
 
     @Transactional
     public Medico create(DadosCadastroMedico dto){
-        var userId = usuarioService.salvarUsuario(dto.nome(), dto.email(), dto.crm());
+        var userId = usuarioService.salvarUsuario(dto.nome(), dto.email(), dto.crm(), Perfil.MEDICO);
         return medicoRepository.save(new Medico(userId, dto));
     }
 

@@ -1,5 +1,6 @@
 package med.voll.api.infra.exeption.security;
 
+import med.voll.api.domain.Perfil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,14 @@ public class SecurityConfigurations{
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
+//                        .requestMatchers( "/consultas/**")
+//                            .hasAnyRole(Perfil.PACIENTE.name(),Perfil.ATENDENTE.name(),Perfil.MEDICO.name())
+//                        .requestMatchers("/pacientes/**")
+//                            .hasRole(Perfil.PACIENTE.name())
+//                        .requestMatchers(HttpMethod.GET, "/medicos/**")
+//                            .hasAnyRole(Perfil.PACIENTE.name(),Perfil.ATENDENTE.name())
+//                        .requestMatchers("/medicos/**")
+//                            .hasRole(Perfil.PACIENTE.name())
                         // se quiser restringir sob um Role especifico:
                         //.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
                         .anyRequest().authenticated()

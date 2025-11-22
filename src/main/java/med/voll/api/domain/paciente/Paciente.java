@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import med.voll.api.domain.Perfil;
 import med.voll.api.domain.Pessoa;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.endereco.Endereco;
@@ -31,7 +32,7 @@ public class Paciente extends Pessoa {
 
 
     public Paciente(Long id, @Valid DadosCadastroPaciente p) {
-        super(id, p.nome(),p.email(),p.telefone(), p.endereco());
+        super(id, p.nome(),p.email(),p.telefone(), Perfil.PACIENTE, p.endereco());
         this.convenio = p.convenio();
     }
 
@@ -49,6 +50,7 @@ public class Paciente extends Pessoa {
         Optional.ofNullable(dto.nome()).ifPresent(this::setNome);
         Optional.ofNullable(dto.telefone()).ifPresent(this::setTelefone);
         Optional.ofNullable(dto.email()).ifPresent(this::setEmail);
+        Optional.ofNullable(dto.perfil()).ifPresent(this::setPerfil);
         Optional.ofNullable(dto.convenio()).ifPresent(this::setConvenio);
         Optional.ofNullable(dto.endereco()).ifPresent(end -> this.setEndereco(new Endereco(end)));
     }

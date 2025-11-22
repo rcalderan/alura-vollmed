@@ -1,5 +1,6 @@
 package med.voll.api.domain.user;
 
+import med.voll.api.domain.Perfil;
 import med.voll.api.domain.medico.Medico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,9 +31,9 @@ public class UsuarioService {
     }
 
 
-    public Long salvarUsuario(String nome, String email, String senha){
+    public Long salvarUsuario(String nome, String email, String senha, Perfil perfil){
         var encryptedPassword = passwordEncoder.encode(senha);
-        var saved =  usuarioRepository.save(new Usuario(nome, email, encryptedPassword));
+        var saved =  usuarioRepository.save(new Usuario(nome, email, encryptedPassword, perfil));
         return  saved.getId();
     }
 

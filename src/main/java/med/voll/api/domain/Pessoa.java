@@ -25,11 +25,15 @@ public abstract class Pessoa {
     @Embedded
     private Endereco endereco;
 
-    public Pessoa(Long id, String nome, String email, String telefone, DadosEndereco endereco){
+    @Enumerated(EnumType.STRING)
+    private Perfil perfil;
+
+    public Pessoa(Long id, String nome, String email, String telefone, Perfil perfil, DadosEndereco endereco){
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
+        this.perfil = perfil;
         this.endereco = new Endereco(endereco);
     }
 }

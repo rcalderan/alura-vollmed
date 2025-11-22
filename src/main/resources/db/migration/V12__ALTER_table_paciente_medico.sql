@@ -1,0 +1,7 @@
+-- 1. Adicionar a coluna como TEXT
+ALTER TABLE pacientes
+ADD COLUMN perfil TEXT NOT NULL DEFAULT 'PACIENTE';
+
+ALTER TABLE medicos
+ADD COLUMN perfil TEXT NOT NULL DEFAULT 'MEDICO';
+

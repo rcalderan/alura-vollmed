@@ -1,5 +1,6 @@
 package med.voll.api.domain.medico;
 
+import med.voll.api.domain.Perfil;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.endereco.DadosEndereco;
 import med.voll.api.domain.paciente.Convenio;
@@ -44,7 +45,7 @@ class MedicoRepositoryTest {
 
         var medico = cadastrarMedico(new DadosCadastroMedico("jao2", "11111111111","jap@vollmed.com","121212", Especialidade.CARDIOLOGIA, dadosEndereco()));
 
-        var paciente2 = cadastrarPaciente(new DadosCadastroPaciente("Pedro", "2323ewwe@teste.com","11111111111",dadosEndereco(), Convenio.PARTICULAR, null));
+        var paciente2 = cadastrarPaciente(new DadosCadastroPaciente("Pedro", "2323ewwe@teste.com","11111111111", dadosEndereco(), Convenio.PARTICULAR, null));
 
         cadastrarConsulta(medico, paciente2, nextMonday10Am);
 
@@ -66,7 +67,7 @@ class MedicoRepositoryTest {
         var medico = cadastrarMedico(new DadosCadastroMedico("jao", "11111111111","jap@vollmed.com","121212", Especialidade.CARDIOLOGIA, dadosEndereco()));
         var medico2 = cadastrarMedico(new DadosCadastroMedico("jao2", "11111111111","jap@vollmed.com","121212", Especialidade.CARDIOLOGIA, dadosEndereco()));
 
-        var paciente2 = cadastrarPaciente(new DadosCadastroPaciente("Pedro", "2323ewwe@teste.com","11111111111",dadosEndereco(), Convenio.PARTICULAR, null));
+        var paciente2 = cadastrarPaciente(new DadosCadastroPaciente("Pedro", "2323ewwe@teste.com","11111111111", dadosEndereco(), Convenio.PARTICULAR, null));
 
         cadastrarConsulta(medico, paciente2, nextMonday10Am);
 
@@ -85,7 +86,7 @@ class MedicoRepositoryTest {
     }
 
     private Medico cadastrarMedico(DadosCadastroMedico dto){
-        var user = new Usuario(dto.nome(),dto.email(),dto.crm());
+        var user = new Usuario(dto.nome(),dto.email(),dto.crm(), Perfil.MEDICO);
         em.persist(user);
         var m = new Medico(user.getId(), dto);
         em.persist(m);
@@ -93,7 +94,7 @@ class MedicoRepositoryTest {
     }
 
     private Paciente cadastrarPaciente(DadosCadastroPaciente dto){
-        var u= new Usuario(dto.nome(),dto.email(),dto.telefone());
+        var u= new Usuario(dto.nome(),dto.email(),dto.telefone(), Perfil.PACIENTE);
         em.persist(u);
         var p = new Paciente(u.getId(), dto);
         em.persist(p);

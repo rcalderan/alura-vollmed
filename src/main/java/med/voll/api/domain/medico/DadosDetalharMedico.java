@@ -1,5 +1,6 @@
 package med.voll.api.domain.medico;
 
+import med.voll.api.domain.Perfil;
 import med.voll.api.domain.endereco.DadosEndereco;
 
 public record DadosDetalharMedico(
@@ -8,6 +9,7 @@ public record DadosDetalharMedico(
         String telefone,
         String email,
         String crm,
+        Perfil perfil,
         Especialidade especialidade,
         DadosEndereco endereco
 ) {
@@ -16,6 +18,7 @@ public record DadosDetalharMedico(
                 md.getNome(), md.getTelefone(),
                 md.getEmail(),
                 md.getCrm(),
+                md.getPerfil(),
                 md.getEspecialidade(), new DadosEndereco(md.getEndereco())
         );
     }

@@ -1,5 +1,6 @@
 package med.voll.api.domain.paciente;
 
+import med.voll.api.domain.Perfil;
 import med.voll.api.domain.medico.DadosListagemMedico;
 import med.voll.api.domain.medico.DadosUpdateMedico;
 import med.voll.api.domain.medico.Medico;
@@ -24,7 +25,7 @@ public class PacienteService {
 
     @Transactional
     public Long salvarPaciente(DadosCadastroPaciente dto){
-        var userId = usuarioService.salvarUsuario(dto.nome(),dto.email(),dto.telefone());
+        var userId = usuarioService.salvarUsuario(dto.nome(),dto.email(),dto.telefone(), Perfil.PACIENTE);
         return pacienteRepository.save(new Paciente(userId, dto)).getId();
     }
 
