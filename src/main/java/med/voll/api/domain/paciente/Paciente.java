@@ -19,8 +19,8 @@ import java.util.Optional;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Entity(name = "pacientes")
-@Table(name = "Pacientes")
+@Entity()
+@Table(name = "pacientes")
 public class Paciente extends Pessoa {
 
     @Setter

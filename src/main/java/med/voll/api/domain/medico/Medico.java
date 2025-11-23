@@ -18,8 +18,8 @@ import java.util.Optional;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of="id")
-@Entity(name = "medicos")
-@Table(name="Medicos")
+@Entity()
+@Table(name="medicos")
 public class Medico {
 
     @Id

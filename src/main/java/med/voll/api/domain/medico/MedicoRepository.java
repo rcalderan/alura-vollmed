@@ -9,12 +9,12 @@ import java.util.List;
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
     @Query("""
-            SELECT m from medicos m
+            SELECT m from Medico m
             WHERE
             m.especialidade = :especialidade
             and
             m.id not in(
-                select c.medico.id from consultas c
+                select c.medico.id from Consulta c
                 where
                 c.date = :dateTime
             )

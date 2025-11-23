@@ -1,1 +1,0 @@
-ALTER TABLE Pacientes ADD COLUMN telefone VARCHAR(15) NOT NULL;

@@ -36,7 +36,7 @@ public class SecurityConfigurations{
                 .sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
+                        //.requestMatchers("/login").permitAll()
 //                        .requestMatchers( "/consultas/**")
 //                            .hasAnyRole(Perfil.PACIENTE.name(),Perfil.ATENDENTE.name(),Perfil.MEDICO.name())
 //                        .requestMatchers("/pacientes/**")

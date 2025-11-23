@@ -30,6 +30,7 @@ public class Usuario implements UserDetails {
     private String login;
     private  String password;
 
+    @Enumerated(EnumType.STRING)
     private Perfil perfil;
 
     public Usuario(String nome, String email, String password, Perfil perfil){

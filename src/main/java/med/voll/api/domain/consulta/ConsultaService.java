@@ -1,14 +1,22 @@
 package med.voll.api.domain.consulta;
 
+import med.voll.api.domain.Perfil;
 import med.voll.api.domain.consulta.validations.IConsultSchedule;
+import med.voll.api.domain.medico.DadosListagemMedico;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
+import med.voll.api.domain.user.Usuario;
 import med.voll.api.infra.exeption.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+
+import java.security.Principal;
 import java.util.List;
 import java.util.Random;
 
@@ -39,6 +47,15 @@ public class ConsultaService {
         paciente.addConsulta(consulta);
 
         return ResponseEntity.ok(new DadosDetalhamentoConsulta( repository.save(consulta)));
+    }
+
+    public Page<DadosListagemConsulta> listAll(Pageable paginacao, Usuario usuario){
+        System.out.println(usuario);
+        return usuario == null || usuario.getPerfil() == Perfil.ATENDENTE
+                ? repository.findAll(paginacao)
+                .map(DadosListagemConsulta::new)
+                : repository.getByPerfil(usuario.getId(), paginacao)
+                .map(DadosListagemConsulta::new);
     }
 
 

@@ -1,1 +1,0 @@
-ALTER TABLE medicos ADD telefone VARCHAR(20) DEFAULT 'N/A' NOT NULL;
