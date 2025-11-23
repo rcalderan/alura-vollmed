@@ -2,10 +2,7 @@ package med.voll.api.domain.user;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import med.voll.api.domain.Perfil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,7 +25,8 @@ public class Usuario implements UserDetails {
     private Long id;
     private String name;
     private String login;
-    private  String password;
+    @Setter
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private Perfil perfil;

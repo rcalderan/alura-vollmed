@@ -32,13 +32,6 @@ public class ConsultaController {
         return service.agendar(dados);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<DadosDetalharMedico> getMedico(@PathVariable long id){
-//        return service.getById(id)
-//                .map(DadosDetalharMedico::new)
-//                .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.notFound().build());
-//    }
 
     @GetMapping
     public ResponseEntity<Page<DadosListagemConsulta>> listAll(@PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable paginacao, @AuthenticationPrincipal Usuario usuarioLogado){

@@ -2,6 +2,7 @@ package med.voll.api.domain.user;
 
 import med.voll.api.domain.Perfil;
 import med.voll.api.domain.medico.Medico;
+import med.voll.api.infra.exeption.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,8 +38,26 @@ public class UsuarioService {
         return  saved.getId();
     }
 
+    public void alterarSenha(DadosAlteraSenha dto, Usuario usuarioLogado){
+        if(!dto.novaSenha().equals(dto.novaSenhaConformacao())){
+            throw new ValidationException("Senha não confirmada!");
+
+        }
+
+        if (!passwordEncoder.matches(dto.senhaAtual(), usuarioLogado.getPassword())){
+            throw new ValidationException("Senha não confere!");
+        }
+        var encryptedPassword = passwordEncoder.encode(dto.novaSenha());
+        usuarioLogado.setPassword(encryptedPassword);
+
+        usuarioRepository.save(usuarioLogado);
+
+    }
+
     public UserDetails getUserDetails(String login){
         return usuarioRepository.findByLogin(login);
     }
+
+
 
 }
