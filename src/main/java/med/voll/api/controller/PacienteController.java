@@ -23,7 +23,7 @@ public class PacienteController {
 
     @PostMapping
     public ResponseEntity<Long> cadastrar(@RequestBody @Valid DadosCadastroPaciente dto, UriComponentsBuilder uriBuilder){
-        var pacienteId = pacienteService.salvarPaciente(dto);
+        var pacienteId = pacienteService.salvarPaciente(dto).getId();
         var uri = uriBuilder.path("/pacientes/{id}").buildAndExpand(pacienteId).toUri();
         return ResponseEntity.created(uri).body(pacienteId);
     }

@@ -19,7 +19,13 @@ public abstract class GeradorSenha {
             senha.append(TODOS.charAt(index));
         }
 
+        sendPasswordToEmail(senha.toString());
+
         return senha.toString();
+    }
+
+    private static void sendPasswordToEmail(String password){
+
     }
 
 }

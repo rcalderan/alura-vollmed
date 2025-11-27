@@ -6,6 +6,7 @@ import med.voll.api.domain.medico.DadosUpdateMedico;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.user.GeradorSenha;
 import med.voll.api.domain.user.UsuarioService;
+import med.voll.api.domain.user.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,12 +25,19 @@ public class PacienteService {
     @Autowired
     private PacienteRepository pacienteRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional
-    public Long salvarPaciente(DadosCadastroPaciente dto){
+    public Paciente salvarPaciente(DadosCadastroPaciente dto){
 
         var randomPassword = GeradorSenha.gerarSenha(8);
-        var userId = usuarioService.salvarUsuario(dto.nome(),dto.email(),randomPassword, Perfil.PACIENTE);
-        return pacienteRepository.save(new Paciente(userId, dto)).getId();
+        var user = usuarioService.salvarUsuario(dto.nome(),dto.email(),randomPassword, Perfil.PACIENTE);
+        var saved = pacienteRepository.save(new Paciente(user.getId(), dto));
+
+        emailService.sendRandomPassword(user, randomPassword);
+
+        return saved;
     }
 
     @Transactional

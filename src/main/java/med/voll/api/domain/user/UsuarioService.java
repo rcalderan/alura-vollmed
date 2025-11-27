@@ -32,10 +32,9 @@ public class UsuarioService {
     }
 
 
-    public Long salvarUsuario(String nome, String email, String senha, Perfil perfil){
+    public Usuario salvarUsuario(String nome, String email, String senha, Perfil perfil){
         var encryptedPassword = passwordEncoder.encode(senha);
-        var saved =  usuarioRepository.save(new Usuario(nome, email, encryptedPassword, perfil));
-        return  saved.getId();
+        return  usuarioRepository.save(new Usuario(nome, email, encryptedPassword, perfil));
     }
 
     public void alterarSenha(DadosAlteraSenha dto, Usuario usuarioLogado){
@@ -58,6 +57,8 @@ public class UsuarioService {
         return usuarioRepository.findByLogin(login);
     }
 
+    public void sendPassowordToUserEmail(){
 
+    }
 
 }
