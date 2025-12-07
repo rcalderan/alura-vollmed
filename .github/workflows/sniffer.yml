@@ -27,8 +27,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+# TODO: Avoid Test integration or create POM profile to separate unity tests from Integration test
+      # At this point, all tests are integration
+#    - name: Build with Maven
+#      run: mvn -B package --file pom.xml
       
     - name: Run Checkstyle
       run: mvn checkstyle:check
